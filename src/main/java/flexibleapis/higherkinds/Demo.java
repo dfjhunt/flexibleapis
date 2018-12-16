@@ -33,7 +33,8 @@ public class Demo {
         CompletableFuture<Product> cfp = FutureM.prj(apr.saveProduct(apr.create(product))).future;
         CompletableFuture<Product> cfp2 = FutureM.prj(apr.saveProduct(apr.create(product2))).future;
 
-        // These are fairly complicated because we're composing them asynchronously
+        //These are fairly complicated because we're composing them asynchronously to make sure the products are
+        //saved before we work with them.
         CompletableFuture<Product> futureResult = cfp.thenCompose(x -> FutureM.prj(productMgr.incrementSales(apr, "1234", 15)).future);
         CompletableFuture<Double> futureTotal =
             cfp.thenCompose(p1 -> cfp2.thenCompose(p2 -> FutureM.prj(productMgr.getTotalPrice(apr, "1234", "5678")).future));
@@ -48,14 +49,14 @@ public class Demo {
 
         // **********JDBC Product Repository
         JDBCProductRepository jpr = new JDBCProductRepository();
-        Try<Product> tv = Try.prj(jpr.saveProduct(jpr.create(product)));
-        Try<Product> tv2 = Try.prj(jpr.saveProduct(jpr.create(product2)));
-        if ((!tv.isException) && (!tv2.isException)) {
-            Try<Product> tp = Try.prj(productMgr.incrementSales(jpr, "1234", 15));
-            Try<Double> td = Try.prj(productMgr.getTotalPrice(jpr, "1234", "5678"));
+        Try<Product> tp = Try.prj(jpr.saveProduct(jpr.create(product)));
+        Try<Product> tp2 = Try.prj(jpr.saveProduct(jpr.create(product2)));
+        if ((!tp.isException) && (!tp2.isException)) {
+            Try<Product> incrementedProductTry = Try.prj(productMgr.incrementSales(jpr, "1234", 15));
+            Try<Double> totalPriceTry = Try.prj(productMgr.getTotalPrice(jpr, "1234", "5678"));
             System.out.println("JDBC Repository");
-            System.out.println(tp);
-            System.out.println(td);
+            System.out.println(incrementedProductTry);
+            System.out.println(totalPriceTry);
         }
 
     }

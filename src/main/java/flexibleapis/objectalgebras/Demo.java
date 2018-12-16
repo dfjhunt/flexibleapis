@@ -21,7 +21,7 @@ public class Demo {
         System.out.println("Basic Repository");
         System.out.println(p + "\n");
 
-        // Async Product Respository
+        // Async Product Repository
         AsyncProductRepository apr = new AsyncProductRepository();
         CompletableFuture<Product> cfp = apr.saveProduct(apr.create(product));
         cfp = cfp.thenCompose(x -> productMgr.incrementSales(apr, "1234", 15));
@@ -32,7 +32,7 @@ public class Demo {
             e.printStackTrace();
         }
 
-        // JDBC Product Respository
+        // JDBC Product Repository
         JDBCProductRepository jpr = new JDBCProductRepository();
         Try<Product> tp = jpr.saveProduct(jpr.create(product));
         if (!tp.isException) {
