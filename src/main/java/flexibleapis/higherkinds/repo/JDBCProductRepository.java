@@ -4,6 +4,7 @@ package flexibleapis.higherkinds.repo;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import flexibleapis.higherkinds.HKT;
@@ -82,6 +83,19 @@ public class JDBCProductRepository implements ProductRepository<Try.t> {
             return Try.success(p1.value + p2.value);
         }
     }
+    
+    public <A,B,C> Try<C> applyBiFunction(HKT<Try.t, A> tryA, HKT<Try.t, B> tryB, BiFunction<A,B,C> f){
+        Try<A> p1 = Try.prj(tryA);
+        Try<B> p2 = Try.prj(tryB);
+
+        if (p1.isException) {
+            return Try.failure(p1.ex);
+        } else if (p2.isException) {
+            return Try.failure(p2.ex);
+        } else {
+            return Try.success(f.apply(p1.value, p2.value));
+        }
+    }
 
     @Override
     public Try<Product> create(Product product) {
@@ -94,8 +108,7 @@ public class JDBCProductRepository implements ProductRepository<Try.t> {
         if (a.isException) {
             return Try.failure(a.ex);
         } else {
-            Product value = a.value;
-            return Try.success(f.apply(value));
+            return Try.success(f.apply(a.value));
         }
     }
 

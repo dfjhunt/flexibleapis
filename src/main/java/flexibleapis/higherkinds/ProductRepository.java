@@ -18,8 +18,8 @@ public interface ProductRepository<T> {
     //*****************************
     
     public HKT<T,Product> create(Product product);
-
-    public HKT<T,Product> modifyProduct(HKT<T,Product> product, Function<Product, Product> f);
     
     public HKT<T, String> createId(String id);
+
+    public HKT<T,Product> modifyProduct(HKT<T,Product> product, Function<Product, Product> f);
 }
