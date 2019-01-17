@@ -9,3 +9,7 @@ src/main/java/flexibleapis/objectalgebras
 ## Lightweight Higher Kinded Types
 https://pipedevnotes.blogspot.com/2018/12/flexible-apis-piece-2-higher-kinded.html <br>
 src/main/java/flexibleapis/higherkinds
+
+## Monads
+https://pipedevnotes.blogspot.com/2019/01/flexible-apis-piece-3-monads.html <br>
+src/main/java/flexibleapis/monads
